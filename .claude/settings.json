@@ -1,0 +1,19 @@
+{
+  "attribution": {
+    "commit": "Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); if echo \"$cmd\" | grep -qE 'git.*commit' && echo \"$cmd\" | grep -qE ' -m '; then msg=$(echo \"$cmd\" | awk '/<<'\"'\"'EOF'\"'\"'/{found=1; next} found{print; exit}'); if [ -z \"$msg\" ]; then msg=$(echo \"$cmd\" | grep -oE '\"[^\"]*\"' | tail -1 | tr -d '\"'); fi; if [ -n \"$msg\" ] && ! echo \"$msg\" | grep -qE '^[A-Z]+-[0-9]+'; then printf '{\"continue\": false, \"stopReason\": \"커밋 메시지가 컨벤션을 따르지 않습니다. 형식: <티켓번호> <요약> (예: GPRD-123 기능 설명). docs/claude/code-convents.md 참조\"}'; fi; fi",
+            "statusMessage": "커밋 메시지 형식 검증 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
